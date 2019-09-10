@@ -1,0 +1,87 @@
+.header {
+    margin-bottom: 30px;
+}
+
+.navbar-header .brand {
+  color: #ffffff;
+  font-size: 16px;
+  text-shadow: 0 1px 0 #555555;
+}
+
+.navbar-header a:link {
+  text-decoration: none;
+}
+
+.navbar-header a:visited {
+  text-decoration: none;
+}
+
+.navbar-header a:hover {
+  text-decoration: none;
+}
+
+.navbar-header a:active {
+  text-decoration: none;
+}
+
+.navbar-oc {
+  background-image: -webkit-linear-gradient(top, #555555, #333333);
+  background-image: linear-gradient(to bottom, #555555, #333333);
+  height: 40px;
+  margin-bottom: 0px;
+}
+
+button.create-button {
+  float: right;
+  margin: 7px 120px;
+}
+
+button.btn-circle {
+    width: 18px;
+    height: 18px;
+    padding: 1px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px
+}
+
+
+treecontrol.tree-light li .cute-custom-selected {
+  color:#FFFFFF;
+  background-color:#428bca;
+}
+
+/* overwrite the treecontrol.tree-light li.tree-expanded i.tree-branch-head, set to none */
+treecontrol.tree-light li.tree-expanded i.tree-branch-head {
+    padding: 1px 10px;
+    background: none no-repeat;
+}
+
+/* overwrite the treecontrol.tree-light li.tree-collapsed i.tree-branch-head, set to none */
+treecontrol.tree-light li.tree-collapsed i.tree-branch-head {
+    padding: 1px 10px;
+    background: none no-repeat;
+}
+
+/* overwrite the bootstrap list-group-item border, set to 0px */
+treecontrol.tree-light li.tree-leaf {
+  border: 0px
+}
+
+.cute-treecontrol {
+  max-height: 768px;
+  overflow: auto;
+}
+
+.cute-warning {
+  margin-left: 20px;
+}
+
+
+.cute-has-error .form-control {
+    -webkit-box-shadow: 0 0 3px 1px rgba(255,0,0,.6);
+    -moz-box-shadow: 0 0 3px 1px rgba(255,0,0,.6);
+    box-shadow: 0 0 3px 1px rgba(255,0,0,.6);
+    border-color: #843534
+}
+

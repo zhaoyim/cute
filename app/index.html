@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="cuteApp" ng-controller="appController">
+    <head>
+        <meta charset="utf-8">
+        <!-- build:js(.) scripts/vendor.js -->
+        <script src="node_modules/jquery/dist/jquery.js"></script>
+        <script src="node_modules/datatables.net/js/jquery.dataTables.js"></script>
+        <script src="node_modules/angular/angular.js"></script>
+        <script src="node_modules/angular-datatables/dist/angular-datatables.js"></script>
+        <script src="node_modules/angular-route/angular-route.js"></script>
+        <script src="node_modules/angular-translate/dist/angular-translate.js"></script>
+        <script src="node_modules/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+        <script src="node_modules/angular-tree-control/angular-tree-control.js"></script>
+        <script src="node_modules/angular-tree-control/context-menu.js"></script>
+        <script src="node_modules/bootstrap/js/dist/util.js"></script>
+        <script src="node_modules/bootstrap/js/dist/modal.js"></script>
+        <script src="node_modules/bootstrap/js/dist/alert.js"></script>
+        <script src="node_modules/ng-tags-input/build/ng-tags-input.js"></script>
+        <script src="node_modules/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:css(.) styles/vendor.css -->
+        <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-grid.css">
+        <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-reboot.css">
+        <link rel="stylesheet" href="node_modules/angular-datatables/dist/css/angular-datatables.css">
+        <link rel="stylesheet" href="node_modules/angular-tree-control/css/tree-control.css">
+        <link rel="stylesheet" href="node_modules/ng-tags-input/build/ng-tags-input.bootstrap.css">
+        <!-- <link rel="stylesheet" href="../node_modules/angular-bootstrap/ui-bootstrap-csp.css"> -->
+        <!-- endbuild -->
+
+        <!-- build:css(app) styles/index.css -->
+        <link rel="stylesheet" href="styles/index.css">
+        <link rel="stylesheet" href="styles/highlight.css">
+        <link rel="stylesheet" href="styles/ng-tags.css">
+        <!-- endbuild -->
+        <script src="conf/config.js"></script>
+        <!-- build:js(app) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/searchcontroller.js"></script>
+        <script src="scripts/detailcontroller.js"></script>
+        <script src="scripts/navigatorcontroller.js"></script>
+        <script src="scripts/addcontroller.js"></script>
+        <script src="scripts/deletecontroller.js"></script>
+        <!-- endbuild -->
+        <title>{{ 'index.title' | translate }}</title>
+    </head>
+    <body>
+        <div class="header">
+            <nav class="navbar navbar-oc">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                      <div style="margin-top: 8px;">
+                        <img src="/images/logo-white.png" style="height: 32px;" alt="cute" title="cute">
+                        <a ng-click="refresh()">
+                          <span class="brand ng-binding">{{ 'index.brand' | translate }}</span>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div ng-show="internalUse">
+                        <!-- Button trigger create modal -->
+                        <button type="button" class="btn btn-default btn-primary create-button" data-toggle="modal" data-backdrop="static" data-target="#createModal">
+                          {{ 'index.add' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div ng-controller="navigatorcontroller as navctrl" class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="tree-border cute-treecontrol">
+                    <treecontrol class="tree-light"
+                                 tree-model="dataForTheTree"
+                                 options="treeOptions"
+                                 node-children="children"
+                                 on-selection="showSelected(node)"
+                                 selected-node="node">
+                        <span ng-if="removeDup(node.type, node.id)" id="{{node.type}}_{{node.id}}">{{node.id}}</span>
+                        <span ng-if="!removeDup(node.type, node.id)" id="{{node.type}}_{{node.id}}">{{node.id}} {{node.description}}</span>
+                    </treecontrol>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <form novalidate class="search-form form-inline">
+                        <div class="text-left">
+                            <span class="glyphicon glyphicon-search"></span>
+                            <label class="sr-only" for="home-search">{{ 'index.search.label' | translate }}</label>
+                            <input ng-model="navctrl.searchContent" type="search" class="form-control input-lg" name="search" id="home-search" size="65" placeholder="{{ 'index.search.label' | translate }}">
+                            <button href=href="javascript:void(0)" ng-click="navctrl.search()" type="submit" class="btn btn-primary btn-lg">{{ 'index.search.button' | translate }}</button>
+                        </div>
+                    </form>
+                    <div ng-show="navctrl.isCUTEEmpty" class="cute-warning">
+                      </br>
+                      <div class="alert alert-warning">
+                        <a class="close" data-dismiss="alert">&times;</a>
+                        <strong>{{ 'index.warning' | translate }}</strong>{{ 'index.warningContent' | translate }}
+                      </div>
+                    </div>
+                    </br>
+                    <div ng-view></div>
+                </div>
+            </div>
+
+          <!-- Create Modal -->
+          <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
+            <div ng-controller="addcontroller">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="createModalLabel">{{ 'add.create.knowledge' | translate }}</h4>
+                  </div>
+                  <div class="modal-body">
+
+
+                    <div ng-show="addFailed" class="alert alert-danger">
+                      <a class="close" data-dismiss="alert">&times;</a>
+                      <strong>Failed: </strong>{{ editFailedMessages }}
+                    </div>
+
+
+                    <form name="createKBForm" novalidate class="form-horizontal">
+
+                      <div class="form-group">
+                        <div class="col-sm-12">
+                          <uib-accordion>
+                            <div uib-accordion-group class="panel-default" is-open="idOpen" ng-init="idOpen = true">
+                              <uib-accordion-heading>
+                                {{ 'detail.label.information' | translate }}
+                                <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': idOpen, 'glyphicon-chevron-right': !idOpen}"></i>
+                              </uib-accordion-heading>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{ 'detail.label.id' | translate }} *</label>
+                                <div ng-class="{ 'cute-has-error': createKBForm.createContentId.$dirty && createKBForm.createContentId.$invalid || createKBForm.createContentId.$pristine}" class="col-sm-9">
+                                  <input name="createContentId" ng-model="addContent.id" class="form-control" required></input>
+                                  <span style="color:red" ng-show="createKBForm.createContentId.$dirty && createKBForm.createContentId.$invalid">
+                                    <span ng-show="createKBForm.createContentId.$error.required">{{ 'add.validation.id' | translate }}</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{ 'detail.label.type' | translate }} *</label>
+                                <div class="col-sm-9">
+                                  <tags-input
+                                    ng-model="tags"
+                                    on-tag-adding="forceOneTag(tags)"
+                                    on-tag-removed="removedTag()"
+                                    on-tag-added="addedTag()"
+                                    min-length="1"
+                                    min-tags="1"
+                                    max-tags="1"
+                                    placeholder=" "
+                                    add-on-paste="true">
+                                    <auto-complete min-length="2" source="loadTags($query)"></auto-complete>
+                                  </tags-input>
+                                  <span style="color:red" ng-show="isCreateContentTypeEmpty">{{ 'add.validation.type' | translate }}</span>
+                                </div>
+
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{ 'detail.label.description' | translate }}</label>
+                                <div class="col-sm-9">
+                                  <input ng-model="addContent.description" class="form-control"></input>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{ 'detail.label.level' | translate }}</label>
+                                <div class="col-sm-9">
+                                  <select ng-model="addContent.level" class="form-control">
+                                    <option ng-repeat="x in addLevels">{{ x }}</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{ 'detail.label.public' | translate }}</label>
+                                <div class="col-sm-9">
+                                  <select ng-model="addContent.public" class="form-control">
+                                    <option ng-repeat="y in addPublic">{{ y }}</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{ 'detail.label.explanation' | translate }}</label>
+                                <div class="col-sm-9">
+                                  <input ng-model="addContent.explanation" class="form-control"></input>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{ 'detail.label.impact' | translate }}</label>
+                                <div class="col-sm-9">
+                                  <input ng-model="addContent.impact" class="form-control"></input>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{ 'detail.label.reference' | translate }}</label>
+                                <div class="col-sm-9">
+                                  <input ng-model="addContent.reference" class="form-control"></input>
+                                </div>
+                              </div>
+                            </div>
+                          </uib-accordion>
+                        </div>
+                      </div>
+
+
+                      <div class="form-group">
+                        <div class="col-sm-12">
+
+                          <uib-accordion>
+
+                            <div uib-accordion-group class="panel-default" is-open="createReasonOpen" ng-init="createReasonOpen = true">
+                              <uib-accordion-heading>
+                                {{ 'detail.label.reasonsAndSteps' | translate }}
+                                <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': createReasonOpen, 'glyphicon-chevron-right': !createReasonOpen}"></i>
+                              </uib-accordion-heading>
+                              <div ng-repeat="item in items">
+
+                                <uib-accordion>
+
+                                  <div uib-accordion-group class="panel-default">
+                                    <uib-accordion-heading>
+                                      <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': item.createStepsOpen, 'glyphicon-chevron-right': !item.createStepsOpen}"></i>
+                                      {{ 'detail.label.reason' | translate }} {{$index + 1}}
+                                      <a class="pull-right" ng-click="removeItem($index)"><i
+                                        class="glyphicon glyphicon-remove"></i></a>
+                                    </uib-accordion-heading>
+
+                                    <div class="form-group">
+                                      <label class="col-sm-2 control-label">{{ 'detail.label.reason' | translate }}</label>
+                                      <div class="col-sm-9">
+                                        <input ng-model="item.reason" class="form-control"></input>
+                                      </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                      <label class="col-sm-2 control-label">{{ 'detail.label.steps' | translate }}</label>
+                                      <div class="col-sm-9">
+                                        <div ng-repeat="step in item.steps">
+                                          <div class="form-group">
+                                            <div class="col-sm-12">
+                                              <div class="col-sm-1">
+                                                <label class="control-label">{{$index + 1}}</label>
+                                              </div>
+                                              <div class="col-sm-9">
+                                                <input class="form-control" ng-model="step.value" />
+                                              </div>
+
+                                              <div class="col-sm-2">
+                                                <button type="button" class="btn btn-success btn-circle" ng-click="incStep($index, item)">
+                                                  <i class="glyphicon glyphicon-plus"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-circle" ng-click="rmvStep($index, item)">
+                                                  <i class="glyphicon glyphicon-remove"></i>
+                                                </button>
+                                              </div>
+                                            </div>
+
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                </uib-accordion>
+
+                              </div>
+                              <button type="button" class="btn btn-default btn-primary btn-sm" ng-click="addItem()">{{ 'add.addItem' | translate }}</button>
+                            </div>
+
+                          </uib-accordion>
+                        </div>
+                      </div>
+
+                    </form>
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'add.cancel' | translate }}</button>
+                    <button ng-click="saveAddContent()" type="button" ng-disabled="createKBForm.$invalid" class="btn btn-primary">{{ 'add.save' | translate }}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

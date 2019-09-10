@@ -1,0 +1,73 @@
+{
+    "index": {
+        "brand": "Cute a little Knowledge Base depend on ElasticSearch",
+        "title": "Cute a little Knowledge Base depend on ElasticSearch",
+        "warning": "WARNING：",
+        "warningContent": "There is not knowledge in the knowledge base, please create or import the knowledge.",
+        "search": {
+          "label": "Search the knowledge base",
+          "button": "Search"
+        },
+        "add": "Create",
+        "table": {
+            "search": {
+                "results": "Search Results:"
+            },
+            "sEmptyTable": "No data available in table",
+            "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+            "sInfoEmpty": "Showing 0 to 0 of 0 entries",
+            "sLoadingRecords": "Loading..."
+        }
+    },
+    "detail": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "label": {
+            "id": "ID",
+            "type": "Components",
+            "description": "Description",
+            "level": "Level",
+            "public": "Public Level",
+            "explanation": "Explanation",
+            "impact": "Impact",
+            "reason": "Reason",
+            "steps": "Steps",
+            "reference": "Reference",
+            "information": "Basic information",
+            "reasonsAndSteps": "Reasons and dismiss steps"
+        }
+    },
+    "add": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "addItem": "Add reasons and steps",
+        "create": {
+            "knowledge": "Create Knowledge"
+        },
+        "validation": {
+          "id": "Please input the knowledge id.",
+          "type": "Please input or select the component name(the tag only can set 1)."
+        }
+    },
+    "edit": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "addItem": "Add reasons and steps",
+        "edit": {
+          "knowledge": "Edit Knowledge"
+        },
+        "validation": {
+          "type": "Please input or select the component name(the tag only can set 1)."
+        }
+    },
+    "delete": {
+      "button": {
+        "delete": "Delete",
+        "cancel": "Cancel"
+      },
+      "delete": {
+        "knowledge": "Delete Knowledge",
+        "confirm": "Do you want to delete the content?"
+      }
+    }
+}

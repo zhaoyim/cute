@@ -1,0 +1,73 @@
+{
+    "index": {
+        "brand": "CUTE 一个基于ElasticSearch的小型知识库",
+        "title": "CUTE 一个基于ElasticSearch的小型知识库",
+        "warning": "警告：",
+        "warningContent": "知识库中没有内容，请创建或倒入知识。",
+        "search": {
+            "label": "查询知识库",
+            "button": "查询"
+        },
+        "add": "创建",
+        "table": {
+            "search": {
+                "results": "查询结果:"
+            },
+            "sEmptyTable": "未查询到记录",
+            "sInfo": "当前显示第 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
+            "sInfoEmpty": "当前显示第 0 到 0 条， 共 0 条记录",
+            "sLoadingRecords": "加载中..."
+        }
+    },
+    "detail": {
+        "edit": "编辑",
+        "delete": "删除",
+        "label": {
+            "id": "唯一标识",
+            "type": "问题所属组件",
+            "description": "问题描述",
+            "level": "问题级别",
+            "public": "公开级别",
+            "explanation": "问题解释",
+            "impact": "对系统影响",
+            "reason": "可能原因",
+            "steps": "处理步骤",
+            "reference": "参考信息",
+            "information": "问题基本信息",
+            "reasonsAndSteps": "可能原因和处理步骤"
+        }
+    },
+    "add": {
+        "save": "保存",
+        "cancel": "取消",
+        "addItem": "添加原因和步骤",
+        "create": {
+            "knowledge": "创建知识"
+        },
+        "validation": {
+            "id": "请输入知识内容唯一标识。",
+            "type": "请输入或选择问题所属组件名称（只能有一个）。"
+        }
+    },
+    "edit": {
+        "save": "保存",
+        "cancel": "取消",
+        "addItem": "添加原因和步骤",
+        "edit": {
+          "knowledge": "编辑知识"
+        },
+        "validation": {
+          "type": "请输入或选择问题所属组件名称（只能有一个）。"
+        }
+    },
+    "delete": {
+        "button": {
+            "delete": "删除",
+            "cancel": "取消"
+        },
+        "delete": {
+            "knowledge": "删除知识",
+            "confirm": "确定删除知识？"
+        }
+    }
+}

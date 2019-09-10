@@ -1,0 +1,268 @@
+<div>
+    <div ng-show="editSuccessfully" class="alert alert-success">
+        <a class="close" data-dismiss="alert">&times;</a>
+        <strong>Success: </strong>{{ editSuccessfullyMessages }}
+    </div>
+    <div ng-show="editFailed" class="alert alert-danger">
+        <a class="close" data-dismiss="alert">&times;</a>
+        <strong>Failed: </strong>{{ editFailedMessages }}
+    </div>
+    <h2>{{ detail._source.description }}</h2>
+    <div ng-show="internalUse">
+        <!-- Button trigger edit modal -->
+        <button type="button" class="btn btn-primary btn-default" data-toggle="modal" data-backdrop="static" data-target="#editModal">
+          {{ 'detail.edit' | translate }}
+        </button>
+        <!-- Button trigger delete modal -->
+        <button type="button" class="btn btn-primary btn-default" data-toggle="modal" data-backdrop="static" data-target="#deleteModal">
+          {{ 'detail.delete' | translate }}
+        </button>
+    </div>
+    </br>
+    <div>
+      <div class="row">
+        <div class="col-sm-10">
+          <uib-accordion>
+            <div uib-accordion-group class="panel-default" is-open="idOpen" ng-init="idOpen = true">
+              <uib-accordion-heading>
+                {{ 'detail.label.information' | translate }}
+                <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': idOpen, 'glyphicon-chevron-right': !idOpen}"></i>
+              </uib-accordion-heading>
+                <div class="row"><label class="col-sm-2">{{ 'detail.label.id' | translate }}</label><p class="col-sm-10">{{ detail._source.id }}</p></div>
+                <div class="row"><label class="col-sm-2">{{ 'detail.label.type' | translate }}</label><p class="col-sm-10">{{ detail._source.type }}</p></div>
+                <div class="row"><label class="col-sm-2">{{ 'detail.label.description' | translate }}</label><p class="col-sm-10">{{ detail._source.description }}</p></div>
+                <div class="row"><label class="col-sm-2">{{ 'detail.label.level' | translate }}</label><p class="col-sm-10">{{ detail._source.level }}</p></div>
+                <div class="row"><label class="col-sm-2">{{ 'detail.label.explanation' | translate }}</label><p class="col-sm-10">{{ detail._source.explanation }}</p></div>
+                <div class="row"><label class="col-sm-2">{{ 'detail.label.impact' | translate }}</label><p class="col-sm-10">{{ detail._source.impact }}</p></div>
+                <div class="row"><label class="col-sm-2">{{ 'detail.label.reference' | translate }}</label><p class="col-sm-10">{{ detail._source.reference }}</p></div>
+            </div>
+          </uib-accordion>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-10">
+          <uib-accordion>
+            <div uib-accordion-group class="panel-default" is-open="reasonOpen" ng-init="reasonOpen = true">
+              <uib-accordion-heading>
+                {{ 'detail.label.reasonsAndSteps' | translate }} <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': reasonOpen, 'glyphicon-chevron-right': !reasonOpen}"></i>
+              </uib-accordion-heading>
+                <div ng-repeat="reasons in detail._source.reasons_steps">
+
+                  <uib-accordion>
+                    <div uib-accordion-group class="panel-default" is-open="reasons.isOpen" ng-init="reasons.isOpen = true">
+
+                      <uib-accordion-heading>
+                        {{ 'detail.label.reason' | translate }} {{$index + 1}}: {{reasons.reason}}
+                        <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': reasons.isOpen, 'glyphicon-chevron-right': !reasons.isOpen}"></i>
+                      </uib-accordion-heading>
+                        <strong>{{ 'detail.label.steps' | translate }}: </strong></br>
+                        <p ng-repeat="(dsKey, dsVal) in reasons.steps">
+                          <strong>{{ dsKey + 1 }}. </strong>{{ dsVal }}
+                        </p>
+
+                    </div>
+                  </uib-accordion>
+                </div>
+            </div>
+          </uib-accordion>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel">
+  <div ng-controller="deletecontroller">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="deleteModalLabel">{{ 'delete.delete.knowledge' | translate }}</h4>
+      </div>
+      <div class="modal-body">
+          {{ 'delete.delete.confirm' | translate }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'delete.button.cancel' | translate }}</button>
+        <button ng-click="deleteContent()" type="button" class="btn btn-primary">{{ 'delete.button.delete' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">{{ 'edit.edit.knowledge' | translate }}</h4>
+      </div>
+      <div class="modal-body">
+
+        <form name="editKBForm" novalidate class="form-horizontal">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <uib-accordion>
+                <div uib-accordion-group class="panel-default" is-open="idOpen" ng-init="idOpen = true">
+                  <uib-accordion-heading>
+                    {{ 'detail.label.information' | translate }}
+                    <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': idOpen, 'glyphicon-chevron-right': !idOpen}"></i>
+                  </uib-accordion-heading>
+
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">{{ 'detail.label.id' | translate }} *</label>
+                      <div class="col-sm-9">
+                        <input ng-disabled="true" ng-model="editContent.id" class="form-control"></input>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">{{ 'detail.label.type' | translate }} *</label>
+                      <div class="col-sm-9">
+                        <tags-input
+                          ng-model="editTags"
+                          on-tag-adding="forceOneTag(editTags)"
+                          on-tag-removed="removedTag()"
+                          on-tag-added="addedTag()"
+                          min-length="1"
+                          min-tags="1"
+                          max-tags="1"
+                          placeholder=" "
+                          add-on-paste="true">
+                          <auto-complete min-length="2" source="loadTags($query)"></auto-complete>
+                        </tags-input>
+                        <span style="color:red" ng-show="isEditContentTypeEmpty">{{ 'edit.validation.type' | translate }}</span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">{{ 'detail.label.description' | translate }}</label>
+                      <div class="col-sm-9">
+                        <input ng-model="editContent.description" class="form-control"></input>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">{{ 'detail.label.level' | translate }}</label>
+                      <div class="col-sm-9">
+                        <select ng-model="editContent.level" class="form-control">
+                          <option ng-repeat="x in editLevels">{{ x }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">{{ 'detail.label.public' | translate }}</label>
+                      <div class="col-sm-9">
+                        <select ng-model="editContent.public" class="form-control">
+                          <option ng-repeat="y in editPublic">{{ y }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">{{ 'detail.label.explanation' | translate }}</label>
+                      <div class="col-sm-9">
+                        <input ng-model="editContent.explanation" class="form-control"></input>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">{{ 'detail.label.impact' | translate }}</label>
+                      <div class="col-sm-9">
+                        <input ng-model="editContent.impact" class="form-control"></input>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">{{ 'detail.label.reference' | translate }}</label>
+                      <div class="col-sm-9">
+                        <input ng-model="editContent.reference" class="form-control"></input>
+                      </div>
+                    </div>
+
+                </div>
+              </uib-accordion>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <div class="col-sm-12">
+
+              <uib-accordion>
+
+                <div uib-accordion-group class="panel-default" is-open="editReasonOpen" ng-init="editReasonOpen = true">
+                  <uib-accordion-heading>
+                    {{ 'detail.label.reasonsAndSteps' | translate }}
+                    <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': editReasonOpen, 'glyphicon-chevron-right': !editReasonOpen}"></i>
+                  </uib-accordion-heading>
+
+                  <div ng-repeat="item in items">
+
+                    <uib-accordion>
+
+                      <div uib-accordion-group class="panel-default">
+                        <uib-accordion-heading>
+                          <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': item.editStepsOpen, 'glyphicon-chevron-right': !item.editStepsOpen}"></i>
+                          {{ 'detail.label.reason' | translate }} {{$index + 1}}: {{item.reason}}
+                          <a class="pull-right" ng-click="removeItem($index)"><i
+                            class="glyphicon glyphicon-remove"></i></a>
+                        </uib-accordion-heading>
+
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label">{{ 'detail.label.reason' | translate }}</label>
+                          <div class="col-sm-9">
+                            <input ng-model="item.reason" class="form-control"></input>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label">{{ 'detail.label.steps' | translate }}</label>
+                          <div class="col-sm-9">
+                            <div ng-repeat="step in item.steps">
+                              <div class="form-group">
+                                <div class="col-sm-12">
+                                  <div class="col-sm-1">
+                                    <label class="control-label">{{$index + 1}}</label>
+                                  </div>
+                                  <div class="col-sm-9">
+                                    <input class="form-control" ng-model="step.value" />
+                                  </div>
+
+                                  <div class="col-sm-2">
+                                    <button type="button" class="btn btn-success btn-circle" ng-click="incStep($index, item)">
+                                      <i class="glyphicon glyphicon-plus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-circle" ng-click="rmvStep($index, item)">
+                                      <i class="glyphicon glyphicon-remove"></i>
+                                    </button>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </uib-accordion>
+
+                  </div>
+                  <button type="button" class="btn btn-default btn-primary btn-sm" ng-click="addItem()">{{ 'edit.addItem' | translate }}</button>
+                </div>
+
+              </uib-accordion>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'edit.cancel' | translate }}</button>
+        <button ng-click="saveEditContent()" type="button" ng-disabled="editKBForm.$invalid" class="btn btn-primary">{{ 'edit.save' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
