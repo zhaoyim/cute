@@ -1,6 +1,8 @@
 # cute
 Cute a little Knowledge Base depend on ElasticSearch
 
+NOTE: current version it just a draft, need to enhance in future
+
 ## How to install
 1. install the nodejs
 2. npm install
